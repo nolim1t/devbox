@@ -12,6 +12,7 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
   #
   config.vm.provision :shell, :path => "install-rvm.sh",  :args => "stable"
   config.vm.provision :shell, :path => "install-ruby.sh", :args => "2.0.0"
+  config.vm.provision :shell, :path => "install-mongo.sh"
 
   config.vm.provision :shell, :path => "nvm-provision.sh"
 
@@ -25,7 +26,7 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
     pkg_cmd << "apt-get install -q -y help2man texinfo python-sphinx python-pip; " \
         "pip install -U pygments; "
 
-    pkg_cmd << "apt-get install couchdb"
+    pkg_cmd << "apt-get install couchdb; "
 
     config.vm.provision :shell, :inline => pkg_cmd
   end
