@@ -17,16 +17,16 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :path => "nvm-provision.sh"
 
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
-     pkg_cmd = "apt-get update -qq; apt-get install -q -y build-essential git " \
+     pkg_cmd = "sudo apt-get update -qq; sudo apt-get install -q -y build-essential git " \
         "autoconf autoconf-archive gnu-standards help2man texinfo; "
-    pkg_cmd << "apt-get install -q -y erlang-base-hipe erlang-dev " \
+    pkg_cmd << "sudo apt-get install -q -y erlang-base-hipe erlang-dev " \
         "erlang-manpages erlang-eunit erlang-nox erlang-xmerl erlang-inets; "
-    pkg_cmd << "apt-get install -q -y libmozjs185-dev libicu-dev " \
+    pkg_cmd << "sudo apt-get install -q -y libmozjs185-dev libicu-dev " \
         "curl libcurl4-gnutls-dev libtool; "
-    pkg_cmd << "apt-get install -q -y help2man texinfo python-sphinx python-pip; " \
-        "pip install -U pygments; "
+    pkg_cmd << "sudo apt-get install -q -y help2man texinfo python-sphinx python-pip; " \
+        "sudo pip install -U pygments; "
 
-    pkg_cmd << "apt-get install couchdb; "
+    pkg_cmd << "sudo apt-get install couchdb; "
 
     config.vm.provision :shell, :inline => pkg_cmd
   end
