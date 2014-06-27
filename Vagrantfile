@@ -10,11 +10,6 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   #
-  config.vm.provision :shell, :path => "install-rvm.sh",  :args => "stable"
-  config.vm.provision :shell, :path => "install-ruby.sh", :args => "2.0.0"
-  config.vm.provision :shell, :path => "install-mongo.sh"
-
-  config.vm.provision :shell, :path => "nvm-provision.sh"
 
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
      pkg_cmd = "sudo apt-get update -qq; sudo apt-get install -q -y build-essential git " \
@@ -30,6 +25,12 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.provision :shell, :inline => pkg_cmd
   end
+
+  # Set up RVM (stable), Ruby 2.0.0, MongoDB (from 10gen repo), and NVM with 0.10.29
+  config.vm.provision :shell, :path => "install-rvm.sh",  :args => "stable"
+  config.vm.provision :shell, :path => "install-ruby.sh", :args => "2.0.0"
+  config.vm.provision :shell, :path => "install-mongo.sh"
+  config.vm.provision :shell, :path => "nvm-provision.sh"
   
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512"]
