@@ -12,28 +12,27 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
   #
 
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
-     pkg_cmd = "sudo apt-get update -qq; sudo apt-get install -q -y build-essential git " \
-        "autoconf autoconf-archive gnu-standards help2man texinfo; "
-    pkg_cmd << "sudo apt-get install -q -y erlang-base-hipe erlang-dev " \
-        "erlang-manpages erlang-eunit erlang-nox erlang-xmerl erlang-inets; "
+    pkg_cmd = "sudo apt-get install -q -y build-essential git " \
+    "autoconf autoconf-archive gnu-standards help2man texinfo; "
     pkg_cmd << "sudo apt-get install -q -y libmozjs185-dev libicu-dev " \
-        "curl libcurl4-gnutls-dev libtool; "
+    "curl libcurl4-gnutls-dev libtool; "
     pkg_cmd << "sudo apt-get install -q -y help2man texinfo python-sphinx python-pip; " \
-        "sudo pip install -U pygments; "
-
-    pkg_cmd << "sudo apt-get install couchdb"
+            "sudo pip install -U pygments; "
 
     config.vm.provision :shell, :inline => pkg_cmd
+    
+    # Set up RVM (stable), Ruby 2.0.0, MongoDB (from 10gen repo), and NVM with 0.10.29
+    config.vm.provision :shell, :path => "install-rvm.sh",  :args => "stable"
+    config.vm.provision :shell, :path => "install-ruby.sh", :args => "2.0.0"
+    config.vm.provision :shell, :path => "install-mongo.sh"
+    config.vm.provision :shell, :path => "preflight-java.sh"
+    config.vm.provision :shell, :path => "nvm-provision.sh"
+    config.vm.provision :shell, :path => "install-herokutools.sh"
+    
+    config.vm.provision :shell, :inline => "sudo apt-get update"
+    
   end
 
-  # Set up RVM (stable), Ruby 2.0.0, MongoDB (from 10gen repo), and NVM with 0.10.29
-  config.vm.provision :shell, :path => "install-rvm.sh",  :args => "stable"
-  config.vm.provision :shell, :path => "install-ruby.sh", :args => "2.0.0"
-  config.vm.provision :shell, :path => "install-mongo.sh"
-  config.vm.provision :shell, :path => "preflight-java.sh"
-  config.vm.provision :shell, :path => "nvm-provision.sh"
-  config.vm.provision :shell, :path => "install-herokutools.sh"
-  
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
