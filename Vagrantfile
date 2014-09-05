@@ -6,6 +6,8 @@ Vagrant::Config.run(VAGRANTFILE_API_VERSION) do |config|
 
 
   config.vm.network :public_network, bridge: 'en0: Wi-Fi (AirPort)'
+  config.ssh.forward_x11 = true
+  config.ssh.forward_agent = true
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
